@@ -47,9 +47,9 @@ public:
     void setDescription(const std::string& desc) { description = desc; }
 
     void displayCategoryInfo() const {
-        std::cout << "Category ID: " << categoryId << "\n"
-                  << "Name       : " << categoryName << "\n"
-                  << "Description: " << description << "\n"
+        std::cout << "Category ID : " << categoryId << "\n"
+                  << "Name        : " << categoryName << "\n"
+                  << "Description : " << description << "\n"
                   << "-----------------------------------------\n";
     }
 };
@@ -119,8 +119,6 @@ public:
     void setAddress(const std::string& addr) { address = addr; }
     void setOwner(const std::string& o) { owner = o; }
     void setStartDate(const Date& d) { startdate = d; }
-    void setCategories(const std::vector<Category>& cats) { categories = cats; }
-    void setFishes(const std::vector<Fish>& f) { fishes = f; }
 
     void addCategory(const Category& category) {
         categories.push_back(category);
@@ -129,7 +127,6 @@ public:
     void addFish(const Fish& fish) {
         fishes.push_back(fish);
     }
-
 
     void displayShopInfo() const {
         std::cout << "=========================================\n"
@@ -146,66 +143,98 @@ public:
     }
 
     void displayAllCategories() const {
-        std::cout << "\n=== ALL CATEGORIES IN " << name << " ===\n";
-        if (categories.empty()) {
-            std::cout << "No categories added yet.\n";
-            return;
-        }
+        std::cout << "\n=========================================\n"
+                  << "           SHOP CATEGORIES LIST          \n"
+                  << "=========================================\n";
         for (const auto& category : categories) {
             category.displayCategoryInfo();
         }
     }
 
-    void displayAllFishes() const {
-        std::cout << "\n=== ALL FISH IN " << name << " INVENTORY ===\n";
-        if (fishes.empty()) {
-            std::cout << "No fish in inventory yet.\n";
-            return;
-        }
-        for (const auto& fish : fishes) {
-            fish.displayFishInfo();
-        }
-    }
+    void displayFishesGroupedByCategory() const {
+        std::cout << "\n=========================================\n"
+                  << "       INVENTORY GROUPED BY CATEGORY     \n"
+                  << "=========================================\n";
 
-    void displayFullShopDetails() const {
-        displayShopInfo();
-        displayAllCategories();
-        displayAllFishes();
+        for (const auto& category : categories) {
+            std::cout << "\n>>> " << category.getCategoryName() 
+                      << " (Category ID: " << category.getCategoryId() << ") <<<\n";
+            std::cout << "Description: " << category.getDescription() << "\n";
+            std::cout << "-----------------------------------------\n";
+
+            int count = 0;
+            for (const auto& fish : fishes) {
+                if (fish.getCategoryId() == category.getCategoryId()) {
+                    fish.displayFishInfo();
+                    count++;
+                }
+            }
+            std::cout << "Total in " << category.getCategoryName() << ": " << count << " fish\n";
+        }
     }
 };
 
 int main() {
-    FishShop shop;
+    Date openingDate(1, 3, 2024);
+    FishShop myShop(101, "AquaWorld Emporium", "789 Ocean Boulevard", "Sarah Jenkins", openingDate);
 
-    std::cout << "=== INITIAL DEFAULT SHOP ===\n";
-    shop.displayShopInfo();
+    Category cat1(1001, "Cichlids", "Intelligent and territorial tropical freshwater fish");
+    Category cat2(1002, "Anabantoids", "Labyrinth breathers capable of taking air from the surface");
+    Category cat3(1003, "Cyprinids", "Hardy freshwater schooling fish including Barbs and Danios");
+    Category cat4(1004, "Poeciliids", "Vibrant, live-bearing peaceful community fish");
 
-    shop.setId(5001);
-    shop.setName("Ocean World Aquarium");
-    shop.setAddress("456 Coral Reef Way");
-    shop.setOwner("Alice Smith");
-    shop.setStartDate(Date(10, 4, 2021));
+    myShop.addCategory(cat1);
+    myShop.addCategory(cat2);
+    myShop.addCategory(cat3);
+    myShop.addCategory(cat4);
 
-    Category c1(101, "Cichlids", "Intelligent & territorial tropical fish");
-    Category c2(102, "Anabantoids", "Labyrinth breathers (Bettas, Gouramis)");
-    shop.addCategory(c1);
-    shop.addCategory(c2);
+    myShop.addFish(Fish(1, "Discus", "Blue Turquoise", "Requires warm, clean water", 1001));
+    myShop.addFish(Fish(2, "Angelfish", "Silver Striped", "Graceful long fins", 1001));
+    myShop.addFish(Fish(3, "Oscar", "Tiger Orange", "Large and intelligent", 1001));
+    myShop.addFish(Fish(4, "German Blue Ram", "Bright Yellow/Blue", "Peaceful dwarf cichlid", 1001));
+    myShop.addFish(Fish(5, "Electric Blue Dempsey", "Neon Blue", "Striking coloration", 1001));
+    myShop.addFish(Fish(6, "Convict Cichlid", "Black and White", "Extremely defensive of fry", 1001));
+    myShop.addFish(Fish(7, "Keyhole Cichlid", "Brownish Yellow", "Shy and peaceful dwarf", 1001));
+    myShop.addFish(Fish(8, "Kribensis", "Pink and Olive", "Cave spawner", 1001));
+    myShop.addFish(Fish(9, "Yellow Lab", "Electric Yellow", "African lake mbuna", 1001));
+    myShop.addFish(Fish(10, "Firemouth", "Red and Grey", "Gills flare when threatened", 1001));
 
-    Fish f1(1, "Discus", "Blue", "Requires warm water", 101);
-    Fish f2(2, "Betta", "Red", "Aggressive towards same species", 102);
-    Fish f3(3, "Angel Fish", "Silver", "Striped body, calm swimmer", 101);
-    shop.addFish(f1);
-    shop.addFish(f2);
-    shop.addFish(f3);
+    myShop.addFish(Fish(11, "Siamese Fighting Fish", "Red and Blue", "Solitary male, long fins", 1002));
+    myShop.addFish(Fish(12, "Dwarf Gourami", "Powder Blue", "Labyrinth breather, peaceful", 1002));
+    myShop.addFish(Fish(13, "Pearl Gourami", "Spotted Silver", "Lace-like pattern", 1002));
+    myShop.addFish(Fish(14, "Three-Spot Gourami", "Opaline", "Hardy and active", 1002));
+    myShop.addFish(Fish(15, "Kissing Gourami", "Pale Pink", "Fights by pressing lips", 1002));
+    myShop.addFish(Fish(16, "Paradise Fish", "Red and Blue Stripes", "Tolerates cold temperatures", 1002));
+    myShop.addFish(Fish(17, "Chocolate Gourami", "Dark Brown", "Requires soft acidic water", 1002));
+    myShop.addFish(Fish(18, "Honey Gourami", "Golden Yellow", "Small, very gentle", 1002));
+    myShop.addFish(Fish(19, "Sparkling Gourami", "Iridescent Green", "Produces clicking sounds", 1002));
+    myShop.addFish(Fish(20, "Moonlight Gourami", "Silvery Green", "Long thread-like feelers", 1002));
 
-    std::cout << "\n=== TESTING GETTERS ===\n";
-    std::cout << "Retrieved Shop Name : " << shop.getName() << "\n";
-    std::cout << "Retrieved Owner     : " << shop.getOwner() << "\n";
-    std::cout << "Retrieved Start Date: " << shop.getStartDate().toString() << "\n";
-    std::cout << "Retrieved Fish Count: " << shop.getFishes().size() << "\n";
+    myShop.addFish(Fish(21, "Zebra Danio", "Silver Striped", "Fast top swimmer", 1003));
+    myShop.addFish(Fish(22, "Cherry Barb", "Bright Crimson", "Schooling species", 1003));
+    myShop.addFish(Fish(23, "Tiger Barb", "Yellow and Black", "Active fin nipper", 1003));
+    myShop.addFish(Fish(24, "Harlequin Rasbora", "Copper Pink", "Distinct black wedge", 1003));
+    myShop.addFish(Fish(25, "Celestial Pearl Danio", "Galaxy Blue", "White spots, red fins", 1003));
+    myShop.addFish(Fish(26, "Rosy Barb", "Rose Red", "Hardy and cold-tolerant", 1003));
+    myShop.addFish(Fish(27, "White Cloud Mountain", "Bronze Silver", "Coldwater nano fish", 1003));
+    myShop.addFish(Fish(28, "Bala Shark", "Silver with Black Fins", "Large active swimmer", 1003));
+    myShop.addFish(Fish(29, "Red Tail Black Shark", "Black and Red", "Territorial bottom dweller", 1003));
+    myShop.addFish(Fish(30, "Odessa Barb", "Red Banded", "Vibrant dark markings", 1003));
 
-    std::cout << "\n=== TESTING FULL DISPLAY FUNCTION ===\n";
-    shop.displayFullShopDetails();
+    myShop.addFish(Fish(31, "Fancy Guppy", "Multicolor Rainbow", "Prolific livebearer", 1004));
+    myShop.addFish(Fish(32, "Black Molly", "Solid Velvet Black", "Prefers slightly brackish water", 1004));
+    myShop.addFish(Fish(33, "Red Wagtail Platy", "Orange and Black", "Friendly community fish", 1004));
+    myShop.addFish(Fish(34, "Green Swordtail", "Olive with Sword Tail", "Males possess long caudal extension", 1004));
+    myShop.addFish(Fish(35, "Endler's Livebearer", "Neon Orange Green", "Small, highly active", 1004));
+    myShop.addFish(Fish(36, "Dalmatian Molly", "Black and White Speckled", "Loves algae feeding", 1004));
+    myShop.addFish(Fish(37, "Mickey Mouse Platy", "Golden Yellow", "Distinct tail marking", 1004));
+    myShop.addFish(Fish(38, "Sailfin Molly", "Iridescent Turquoise", "High back fin in males", 1004));
+    myShop.addFish(Fish(39, "Pineapple Swordtail", "Yellow Red", "Bright contrast colors", 1004));
+    myShop.addFish(Fish(40, "Mosquito Fish", "Grey Translucent", "Hardy mosquito larva eater", 1004));
+
+    myShop.displayShopInfo();
+    myShop.displayAllCategories();
+    myShop.displayFishesGroupedByCategory();
 
     return 0;
 }
