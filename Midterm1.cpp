@@ -22,15 +22,40 @@ public:
     Fish(int id, std::string name, std::string color, std::string characteristic) 
         : id(id), name(name), color(color), characteristic(characteristic) {}
 
-    int getId() const { return id; }
-    std::string getName() const { return name; }
-    std::string getColor() const { return color; }
-    std::string getCharacteristic() const { return characteristic; }
 
-    void setId(int id) { this->id = id; }
-    void setName(const std::string& name) { this->name = name; }
-    void setColor(const std::string& color) { this->color = color; }
-    void setCharacteristic(const std::string& characteristic) { this->characteristic = characteristic; }
+    int getId() const {
+        return id;
+    }
+
+    std::string getName() const {
+        return name;
+    }
+
+    std::string getColor() const {
+        return color;
+    }
+
+    std::string getCharacteristic() const {
+        return characteristic;
+    }
+
+
+    void setId(int id) {
+        this->id = id;
+    }
+
+    void setName(std::string n) {
+        name = n;
+    }
+
+    void setColor(std::string c) {
+        color = c;
+    }
+
+    void setCharacteristic(std::string ch) {
+        characteristic = ch;
+    }
+
 
     void display() const {
         std::cout << "ID: " << id << "\n"
@@ -42,18 +67,21 @@ public:
 };
 
 int main() {
-    Fish fish1(1);
-    Fish fish2(2, "Clown Fish");
-    Fish fish3(3, "Turtle", "Green");
-    Fish fish4(4, "Great White Shark", "White", "Top predator");
-    Fish fish5(5, "Betta", "Red/Blue", "Aggressive towards same species");
-
-    std::cout << "=== Testing Overloaded Constructors ===\n\n";
+    Fish fish1;
+    std::cout << "=== Default Fish1 before Setters ===\n";
     fish1.display();
-    fish2.display();
-    fish3.display();
-    fish4.display();
-    fish5.display();
+
+    fish1.setId(101);
+    fish1.setName("Guppy");
+    fish1.setColor("Rainbow");
+    fish1.setCharacteristic("Peaceful surface swimmer");
+
+    std::cout << "=== Fish1 after Setters ===\n";
+    fish1.display();
+
+    std::cout << "=== Testing Getters for Fish1 ===\n";
+    std::cout << "Retrieved Name: " << fish1.getName() << "\n";
+    std::cout << "Retrieved Color: " << fish1.getColor() << "\n";
 
     return 0;
 }
