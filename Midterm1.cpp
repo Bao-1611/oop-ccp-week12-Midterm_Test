@@ -13,20 +13,44 @@ public:
     Category() 
         : categoryId(0), categoryName("Uncategorized"), description("None") {}
 
+    Category(int id) 
+        : categoryId(id), categoryName("Uncategorized"), description("None") {}
+
+    Category(int id, std::string name) 
+        : categoryId(id), categoryName(name), description("None") {}
+
     Category(int id, std::string name, std::string desc) 
         : categoryId(id), categoryName(name), description(desc) {}
 
-    int getCategoryId() const { return categoryId; }
-    std::string getCategoryName() const { return categoryName; }
-    std::string getDescription() const { return description; }
+    int getCategoryId() const { 
+        return categoryId; 
+    }
 
-    void setCategoryId(int id) { categoryId = id; }
-    void setCategoryName(const std::string& name) { categoryName = name; }
-    void setDescription(const std::string& desc) { description = desc; }
+    std::string getCategoryName() const { 
+        return categoryName; 
+    }
+
+    std::string getDescription() const { 
+        return description; 
+    }
+
+    void setCategoryId(int id) { 
+        categoryId = id; 
+    }
+
+    void setCategoryName(const std::string& name) { 
+        categoryName = name; 
+    }
+
+    void setDescription(const std::string& desc) { 
+        description = desc; 
+    }
 
     void displayCategoryInfo() const {
-        std::cout << "Category [" << categoryId << "]: " << categoryName 
-                  << " | " << description << "\n";
+        std::cout << "Category ID: " << categoryId << "\n"
+                  << "Category Name: " << categoryName << "\n"
+                  << "Description: " << description << "\n"
+                  << "-----------------------------\n";
     }
 };
 
@@ -64,10 +88,10 @@ public:
     Category getCategory() const { return category; }
 
     void setId(int id) { this->id = id; }
-    void setName(std::string n) { name = n; }
-    void setColor(std::string c) { color = c; }
-    void setCharacteristic(std::string ch) { characteristic = ch; }
-    void setCategory(Category cat) { category = cat; }
+    void setName(const std::string& n) { name = n; }
+    void setColor(const std::string& c) { color = c; }
+    void setCharacteristic(const std::string& ch) { characteristic = ch; }
+    void setCategory(const Category& cat) { category = cat; }
 
     void displayFishInfo() const {
         std::cout << "ID: " << id << "\n"
@@ -80,40 +104,33 @@ public:
 };
 
 int main() {
-    Category catCichlids(1, "Cichlids", "Intelligent & territorial tropical fish");
-    Category catAnabantoids(2, "Anabantoids", "Labyrinth breathers (Bettas, Gouramis)");
-    Category catCyprinids(3, "Cyprinids", "Hardy freshwater schooling fish");
+    Category catDefault; 
+    Category cat1(1, "Cichlids", "Intelligent & territorial tropical fish");
+    Category cat2(2, "Anabantoids", "Labyrinth breathers (Bettas, Gouramis)");
+    Category cat3(3, "Cyprinids", "Hardy freshwater schooling fish");
 
-    Fish fish1(1, "Discus", "Blue", "Requires warm, clean water", catCichlids);
-    Fish fish2(2, "Betta", "Red", "Aggressive towards same species", catAnabantoids);
-    Fish fish3(3, "Goldfish", "Orange", "Coldwater, peaceful", catCyprinids);
-    Fish fish4(4, "Angel Fish", "Silver", "Striped body, elegant swimmer", catCichlids);
-    Fish fish5(5, "Gourami", "Blue", "Calm labyrinth breather", catAnabantoids);
+    std::cout << "=== TESTING CATEGORY METHODS ===\n";
+    std::cout << "Default Category before setters:\n";
+    catDefault.displayCategoryInfo();
 
-    std::vector<Fish> fishList = { fish1, fish2, fish3, fish4, fish5 };
+    catDefault.setCategoryId(4);
+    catDefault.setCategoryName("Catfish");
+    catDefault.setDescription("Bottom-feeding freshwater fish with barbels");
 
-    std::cout << "=== ALL FISH WITH CATEGORIES ===\n\n";
-    for (const auto& fish : fishList) {
-        fish.displayFishInfo();
-    }
+    std::cout << "Updated Category using setters:\n";
+    catDefault.displayCategoryInfo();
 
-    std::map<std::string, std::vector<Fish>> groupedByCategory;
-    for (const auto& fish : fishList) {
-        groupedByCategory[fish.getCategory().getCategoryName()].push_back(fish);
-    }
+    std::cout << "Retrieved via Getters -> Name: " << cat1.getCategoryName() 
+              << " | ID: " << cat1.getCategoryId() << "\n\n";
 
-    std::cout << "\n=========================================\n";
-    std::cout << "      FISH GROUPED BY CATEGORY           \n";
-    std::cout << "=========================================\n\n";
+    Fish fish1(1, "Discus", "Blue", "Requires warm, clean water", cat1);
+    Fish fish2(2, "Betta", "Red", "Aggressive towards same species", cat2);
+    Fish fish3(3, "Goldfish", "Orange", "Coldwater, peaceful", cat3);
 
-    for (const auto& entry : groupedByCategory) {
-        std::cout << ">>> CATEGORY: " << entry.first << " <<<\n";
-        for (const auto& fish : entry.second) {
-            std::cout << "  - [ID: " << fish.getId() << "] " 
-                      << fish.getName() << " (" << fish.getColor() << ")\n";
-        }
-        std::cout << "\n";
-    }
+    std::cout << "=== FISH WITH LINKED CATEGORIES ===\n\n";
+    fish1.displayFishInfo();
+    fish2.displayFishInfo();
+    fish3.displayFishInfo();
 
     return 0;
 }
