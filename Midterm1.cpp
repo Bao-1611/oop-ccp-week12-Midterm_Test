@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
+
 
 class Category {
 private:
@@ -10,7 +10,9 @@ private:
     std::string description;
 
 public:
-    Category() : categoryId(0), categoryName("Uncategorized"), description("None") {}
+    Category() 
+        : categoryId(0), categoryName("Uncategorized"), description("None") {}
+
     Category(int id, std::string name, std::string desc) 
         : categoryId(id), categoryName(name), description(desc) {}
 
@@ -24,9 +26,9 @@ public:
 
     void displayCategoryInfo() const {
         std::cout << "Category ID: " << categoryId << "\n"
-                  << "Category Name: " << categoryName << "\n"
+                  << "Name       : " << categoryName << "\n"
                   << "Description: " << description << "\n"
-                  << "-----------------------------\n";
+                  << "-----------------------------------------\n";
     }
 };
 
@@ -36,7 +38,7 @@ private:
     std::string name;
     std::string color;
     std::string characteristic;
-    int categoryId; 
+    int categoryId;
 
 public:
     Fish() 
@@ -61,39 +63,64 @@ public:
     std::string getName() const { return name; }
     std::string getColor() const { return color; }
     std::string getCharacteristic() const { return characteristic; }
-    int getCategoryId() const { return categoryId; } 
+    int getCategoryId() const { return categoryId; }
 
     void setId(int id) { this->id = id; }
     void setName(const std::string& n) { name = n; }
     void setColor(const std::string& c) { color = c; }
     void setCharacteristic(const std::string& ch) { characteristic = ch; }
-    void setCategoryId(int catId) { categoryId = catId; } 
+    void setCategoryId(int catId) { categoryId = catId; }
 
     void displayFishInfo() const {
-        std::cout << "ID: " << id << "\n"
-                  << "Name: " << name << "\n"
-                  << "Color: " << color << "\n"
+        std::cout << "ID            : " << id << "\n"
+                  << "Name          : " << name << "\n"
+                  << "Color         : " << color << "\n"
                   << "Characteristic: " << characteristic << "\n"
-                  << "Category ID: " << categoryId << "\n" 
+                  << "Category ID   : " << categoryId << "\n"
                   << "-----------------------------------------\n";
     }
 };
 
 int main() {
-    Fish fish1(1, "Discus", "Blue", "Requires warm, clean water", 101);
-    Fish fish2(2, "Betta", "Red", "Aggressive towards same species", 102);
-    Fish fish3(3, "Goldfish", "Orange", "Coldwater, peaceful", 103);
+    std::vector<Category> categories = {
+        Category(101, "Cichlids", "Intelligent and territorial tropical freshwater fish"),
+        Category(102, "Anabantoids", "Labyrinth breathers that can take air from the surface"),
+        Category(103, "Cyprinids", "Hardy freshwater fish including Barbs, Danios, and Goldfish")
+    };
 
-    std::cout << "=== FISH INFORMATION WITH CATEGORY ID ===\n\n";
-    fish1.displayFishInfo();
-    fish2.displayFishInfo();
-    fish3.displayFishInfo();
+    std::vector<Fish> fishList = {
+        Fish(1, "Discus", "Blue", "Requires warm, clean water", 101),
+        Fish(2, "Angel Fish", "Silver", "Striped body, elegant swimmer", 101),
+        Fish(3, "Betta", "Red", "Aggressive towards same species", 102),
+        Fish(4, "Gourami", "Blue", "Calm labyrinth breather", 102),
+        Fish(5, "Goldfish", "Orange", "Coldwater, peaceful", 103),
+        Fish(6, "Cherry Barb", "Red", "Schooling fish, vibrant color", 103)
+    };
 
-    std::cout << "Updating Fish 1's Category ID using setter...\n";
-    fish1.setCategoryId(105);
-    std::cout << "New Category ID via Getter: " << fish1.getCategoryId() << "\n\n";
+    std::cout << "=========================================\n";
+    std::cout << "          AVAILABLE CATEGORIES           \n";
+    std::cout << "=========================================\n";
+    for (const auto& category : categories) {
+        category.displayCategoryInfo();
+    }
 
-    fish1.displayFishInfo();
+    int selectedCategoryId = 102; 
+
+    std::cout << "\n=========================================\n";
+    std::cout << "   DISPLAYING FISH IN CATEGORY ID: " << selectedCategoryId << "\n";
+    std::cout << "=========================================\n";
+
+    bool found = false;
+    for (const auto& fish : fishList) {
+        if (fish.getCategoryId() == selectedCategoryId) {
+            fish.displayFishInfo();
+            found = true;
+        }
+    }
+
+    if (!found) {
+        std::cout << "No fish found for Category ID " << selectedCategoryId << ".\n";
+    }
 
     return 0;
 }
