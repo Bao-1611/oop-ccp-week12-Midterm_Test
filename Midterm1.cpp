@@ -119,6 +119,8 @@ public:
     void setAddress(const std::string& addr) { address = addr; }
     void setOwner(const std::string& o) { owner = o; }
     void setStartDate(const Date& d) { startdate = d; }
+    void setCategories(const std::vector<Category>& cats) { categories = cats; }
+    void setFishes(const std::vector<Fish>& f) { fishes = f; }
 
     void addCategory(const Category& category) {
         categories.push_back(category);
@@ -127,6 +129,7 @@ public:
     void addFish(const Fish& fish) {
         fishes.push_back(fish);
     }
+
 
     void displayShopInfo() const {
         std::cout << "=========================================\n"
@@ -141,19 +144,68 @@ public:
                   << "Total Fish: " << fishes.size() << " in inventory\n"
                   << "-----------------------------------------\n";
     }
+
+    void displayAllCategories() const {
+        std::cout << "\n=== ALL CATEGORIES IN " << name << " ===\n";
+        if (categories.empty()) {
+            std::cout << "No categories added yet.\n";
+            return;
+        }
+        for (const auto& category : categories) {
+            category.displayCategoryInfo();
+        }
+    }
+
+    void displayAllFishes() const {
+        std::cout << "\n=== ALL FISH IN " << name << " INVENTORY ===\n";
+        if (fishes.empty()) {
+            std::cout << "No fish in inventory yet.\n";
+            return;
+        }
+        for (const auto& fish : fishes) {
+            fish.displayFishInfo();
+        }
+    }
+
+    void displayFullShopDetails() const {
+        displayShopInfo();
+        displayAllCategories();
+        displayAllFishes();
+    }
 };
 
 int main() {
-    Date openingDate(15, 6, 2022);
-    FishShop shop(1001, "AquaParadise", "123 Main Street", "John Doe", openingDate);
+    FishShop shop;
 
-    shop.addCategory(Category(101, "Cichlids", "Intelligent freshwater fish"));
-    shop.addCategory(Category(102, "Anabantoids", "Labyrinth breathers"));
-
-    shop.addFish(Fish(1, "Discus", "Blue", "Requires warm water", 101));
-    shop.addFish(Fish(2, "Betta", "Red", "Aggressive male", 102));
-
+    std::cout << "=== INITIAL DEFAULT SHOP ===\n";
     shop.displayShopInfo();
+
+    shop.setId(5001);
+    shop.setName("Ocean World Aquarium");
+    shop.setAddress("456 Coral Reef Way");
+    shop.setOwner("Alice Smith");
+    shop.setStartDate(Date(10, 4, 2021));
+
+    Category c1(101, "Cichlids", "Intelligent & territorial tropical fish");
+    Category c2(102, "Anabantoids", "Labyrinth breathers (Bettas, Gouramis)");
+    shop.addCategory(c1);
+    shop.addCategory(c2);
+
+    Fish f1(1, "Discus", "Blue", "Requires warm water", 101);
+    Fish f2(2, "Betta", "Red", "Aggressive towards same species", 102);
+    Fish f3(3, "Angel Fish", "Silver", "Striped body, calm swimmer", 101);
+    shop.addFish(f1);
+    shop.addFish(f2);
+    shop.addFish(f3);
+
+    std::cout << "\n=== TESTING GETTERS ===\n";
+    std::cout << "Retrieved Shop Name : " << shop.getName() << "\n";
+    std::cout << "Retrieved Owner     : " << shop.getOwner() << "\n";
+    std::cout << "Retrieved Start Date: " << shop.getStartDate().toString() << "\n";
+    std::cout << "Retrieved Fish Count: " << shop.getFishes().size() << "\n";
+
+    std::cout << "\n=== TESTING FULL DISPLAY FUNCTION ===\n";
+    shop.displayFullShopDetails();
 
     return 0;
 }
