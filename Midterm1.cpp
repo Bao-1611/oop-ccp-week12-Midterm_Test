@@ -9,9 +9,17 @@ private:
     std::string characteristic;
 
 public:
-    Fish() : id(0), name(""), color(""), characteristic("") {}
+    Fish() : id(0), name("Unknown"), color("Unknown"), characteristic("None") {}
 
-    Fish(int id, std::string name, std::string color, std::string characteristic)
+    Fish(int id) : id(id), name("Unknown"), color("Unknown"), characteristic("None") {}
+
+    Fish(int id, std::string name) 
+        : id(id), name(name), color("Unknown"), characteristic("None") {}
+
+    Fish(int id, std::string name, std::string color) 
+        : id(id), name(name), color(color), characteristic("None") {}
+
+    Fish(int id, std::string name, std::string color, std::string characteristic) 
         : id(id), name(name), color(color), characteristic(characteristic) {}
 
     int getId() const { return id; }
@@ -34,11 +42,18 @@ public:
 };
 
 int main() {
-    Fish betta(1, "Betta", "Red/Blue", "Aggressive towards same species");
-    Fish goldfish(2, "Goldfish", "Orange", "Peaceful");
+    Fish fish1(1);
+    Fish fish2(2, "Clown Fish");
+    Fish fish3(3, "Turtle", "Green");
+    Fish fish4(4, "Great White Shark", "White", "Top predator");
+    Fish fish5(5, "Betta", "Red/Blue", "Aggressive towards same species");
 
-    betta.display();
-    goldfish.display();
+    std::cout << "=== Testing Overloaded Constructors ===\n\n";
+    fish1.display();
+    fish2.display();
+    fish3.display();
+    fish4.display();
+    fish5.display();
 
     return 0;
 }
