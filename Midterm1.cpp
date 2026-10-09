@@ -2,6 +2,30 @@
 #include <string>
 #include <vector>
 
+class Date {
+private:
+    int day;
+    int month;
+    int year;
+
+public:
+    Date() : day(1), month(1), year(2026) {}
+    Date(int d, int m, int y) : day(d), month(m), year(y) {}
+
+    int getDay() const { return day; }
+    int getMonth() const { return month; }
+    int getYear() const { return year; }
+
+    void setDate(int d, int m, int y) {
+        day = d;
+        month = m;
+        year = y;
+    }
+
+    std::string toString() const {
+        return std::to_string(day) + "/" + std::to_string(month) + "/" + std::to_string(year);
+    }
+};
 
 class Category {
 private:
@@ -10,9 +34,7 @@ private:
     std::string description;
 
 public:
-    Category() 
-        : categoryId(0), categoryName("Uncategorized"), description("None") {}
-
+    Category() : categoryId(0), categoryName("Uncategorized"), description("None") {}
     Category(int id, std::string name, std::string desc) 
         : categoryId(id), categoryName(name), description(desc) {}
 
@@ -41,21 +63,7 @@ private:
     int categoryId;
 
 public:
-    Fish() 
-        : id(0), name("Unknown"), color("Unknown"), characteristic("None"), categoryId(0) {}
-
-    Fish(int id) 
-        : id(id), name("Unknown"), color("Unknown"), characteristic("None"), categoryId(0) {}
-
-    Fish(int id, std::string name) 
-        : id(id), name(name), color("Unknown"), characteristic("None"), categoryId(0) {}
-
-    Fish(int id, std::string name, std::string color) 
-        : id(id), name(name), color(color), characteristic("None"), categoryId(0) {}
-
-    Fish(int id, std::string name, std::string color, std::string characteristic) 
-        : id(id), name(name), color(color), characteristic(characteristic), categoryId(0) {}
-
+    Fish() : id(0), name("Unknown"), color("Unknown"), characteristic("None"), categoryId(0) {}
     Fish(int id, std::string name, std::string color, std::string characteristic, int categoryId) 
         : id(id), name(name), color(color), characteristic(characteristic), categoryId(categoryId) {}
 
@@ -81,46 +89,71 @@ public:
     }
 };
 
+class FishShop {
+private:
+    int id;
+    std::string name;
+    std::string address;
+    std::string owner;
+    Date startdate;
+    std::vector<Category> categories;
+    std::vector<Fish> fishes;
+
+public:
+    FishShop() 
+        : id(0), name("Unknown Shop"), address("Unknown Address"), owner("Unknown Owner"), startdate() {}
+
+    FishShop(int id, std::string name, std::string address, std::string owner, Date startdate)
+        : id(id), name(name), address(address), owner(owner), startdate(startdate) {}
+
+    int getId() const { return id; }
+    std::string getName() const { return name; }
+    std::string getAddress() const { return address; }
+    std::string getOwner() const { return owner; }
+    Date getStartDate() const { return startdate; }
+    std::vector<Category> getCategories() const { return categories; }
+    std::vector<Fish> getFishes() const { return fishes; }
+
+    void setId(int id) { this->id = id; }
+    void setName(const std::string& n) { name = n; }
+    void setAddress(const std::string& addr) { address = addr; }
+    void setOwner(const std::string& o) { owner = o; }
+    void setStartDate(const Date& d) { startdate = d; }
+
+    void addCategory(const Category& category) {
+        categories.push_back(category);
+    }
+
+    void addFish(const Fish& fish) {
+        fishes.push_back(fish);
+    }
+
+    void displayShopInfo() const {
+        std::cout << "=========================================\n"
+                  << "            FISH SHOP DETAILS            \n"
+                  << "=========================================\n"
+                  << "Shop ID   : " << id << "\n"
+                  << "Shop Name : " << name << "\n"
+                  << "Address   : " << address << "\n"
+                  << "Owner     : " << owner << "\n"
+                  << "Start Date: " << startdate.toString() << "\n"
+                  << "Categories: " << categories.size() << " available\n"
+                  << "Total Fish: " << fishes.size() << " in inventory\n"
+                  << "-----------------------------------------\n";
+    }
+};
+
 int main() {
-    std::vector<Category> categories = {
-        Category(101, "Cichlids", "Intelligent and territorial tropical freshwater fish"),
-        Category(102, "Anabantoids", "Labyrinth breathers that can take air from the surface"),
-        Category(103, "Cyprinids", "Hardy freshwater fish including Barbs, Danios, and Goldfish")
-    };
+    Date openingDate(15, 6, 2022);
+    FishShop shop(1001, "AquaParadise", "123 Main Street", "John Doe", openingDate);
 
-    std::vector<Fish> fishList = {
-        Fish(1, "Discus", "Blue", "Requires warm, clean water", 101),
-        Fish(2, "Angel Fish", "Silver", "Striped body, elegant swimmer", 101),
-        Fish(3, "Betta", "Red", "Aggressive towards same species", 102),
-        Fish(4, "Gourami", "Blue", "Calm labyrinth breather", 102),
-        Fish(5, "Goldfish", "Orange", "Coldwater, peaceful", 103),
-        Fish(6, "Cherry Barb", "Red", "Schooling fish, vibrant color", 103)
-    };
+    shop.addCategory(Category(101, "Cichlids", "Intelligent freshwater fish"));
+    shop.addCategory(Category(102, "Anabantoids", "Labyrinth breathers"));
 
-    std::cout << "=========================================\n";
-    std::cout << "          AVAILABLE CATEGORIES           \n";
-    std::cout << "=========================================\n";
-    for (const auto& category : categories) {
-        category.displayCategoryInfo();
-    }
+    shop.addFish(Fish(1, "Discus", "Blue", "Requires warm water", 101));
+    shop.addFish(Fish(2, "Betta", "Red", "Aggressive male", 102));
 
-    int selectedCategoryId = 102; 
-
-    std::cout << "\n=========================================\n";
-    std::cout << "   DISPLAYING FISH IN CATEGORY ID: " << selectedCategoryId << "\n";
-    std::cout << "=========================================\n";
-
-    bool found = false;
-    for (const auto& fish : fishList) {
-        if (fish.getCategoryId() == selectedCategoryId) {
-            fish.displayFishInfo();
-            found = true;
-        }
-    }
-
-    if (!found) {
-        std::cout << "No fish found for Category ID " << selectedCategoryId << ".\n";
-    }
+    shop.displayShopInfo();
 
     return 0;
 }
